@@ -1,0 +1,8 @@
+These colors are inspired and taken from the Atlassian website. Here is the link: https://atlassian.design/foundations/color-new/color-palette-new
+
+
+Quick Tips:
+
+1- For each category, it is better to use white text for number 7 and above as the foreground.
+
+2- All categories start from their lightest version to their darkest. So, for white this means that "White_1" will be pure white and keeps getting darker as your travers. For Black, "Black_1" will be the lightest and becomes darker as you tarvers.

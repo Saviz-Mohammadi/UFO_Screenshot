@@ -1,0 +1,208 @@
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+For handling SideBar and StackLayout there are two ways that I know of.
+
+The first method involves emitting a signal from SideBar along with index
+that you want the StackLayout to target like this:
+
+Connections {
+                target: ufo_SideBar_1
+
+                function onTabChanged(index) {
+                    switch (index) {
+                    case 0:
+                        stackLayout_1.currentIndex = 0
+                        break
+                    case 1:
+                        stackLayout_1.currentIndex = 1
+                        break
+                    case 2:
+                        stackLayout_1.currentIndex = 2
+                        break
+                    default:
+                        stackLayout_1.currentIndex = 3
+                    }
+                }
+            }
+
+The problem is that this can be annoying as the way you place elements inisde
+of the stacklayout will deterimne the index. So, you need to do alot of
+cleanup and making sure elements are placed in the correct order.
+
+The second method does not depend on the placement and is much more flexible.
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+I find Modules and other new concepts in Qt/QML very challenging to grasp
+and somewhat unreliable. As a result, I mostly depend on my own
+straightforward methods for creating a Qt/QML project. Moreover, I've
+found the documentation to be quite inadequate.
+
+However, if you're keen on exploring these new concepts, there's an
+interesting blog post that provides better explanations:
+
+https://www.basyskom.de/en/2024/how-to-use-modern-qml-tooling-in-practice/
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+For anything related to QtQuick, the main page is: [QtQuick Controls](https://doc.qt.io/qt-6/qtquickcontrols-index.html).
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+Here’s an example of accessing an inner object element through the `Item` element:
+
+```qml
+Item {
+    id: root
+    property alias buttonObj: tabButton
+
+    TabButton {
+        id: tabButton
+    }
+}
+```
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+Learn more about exposing inner functionality of custom component types in QML using default attributes: https://doc.qt.io/qt-6/qtqml-syntax-objectattributes.html
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+Using anchors with IDs can sometimes lead to errors like:
+
+```
+QML ColumnLayout: Cannot anchor to an item that isn't a parent or sibling.
+```
+
+Although `ScrollView` seems like the parent, in QML, controls like `ScrollView` have a hidden `contentItem` as the actual parent. To handle this, use `parent` instead of relying on IDs for positioning and layout. For more details, refer to these answers on Stack Overflow:
+
+- https://stackoverflow.com/questions/67236936/qtquick-what-is-meant-by-parent-item
+- https://stackoverflow.com/questions/53307153/property-contentitem-in-qml
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+When working with JavaScript in QML and navigating models, remember:
+
+- For plain JavaScript arrays, use `model.length`.
+- For Qt types related to models or views like `ListModel`, `Repeater`, or `ListView`, use the `count` property (`rep.count`).
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+To determine the executable location in QML, consider exposing it via context from C++. Despite the availability of `QStandardPaths` in both C++ and QML, locating the executable remains challenging without this context.
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+QML files can be embedded into executables using Qt's qrc file management system. However, in this template, files are kept separate and imported. When referencing icons or resources in QML files, use relative paths:
+
+```qml
+path: "./../icons/google fonts/name.svg"
+```
+
+For executable files, use relative paths like:
+
+```qml
+path: "./resources/category/files"
+```
+
+This approach keeps everything relative, structured, and avoids complications with standard executable paths.
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+Some settings in applications can be applied directly, while others requiring synchronization and saving can be managed using `QSettings`. Create a custom file associated with the cache folder to listen for changes and synchronize them accordingly. This approach ensures that changes are propagated efficiently across relevant sections of the application.
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+if you embed QtObject inside your Item, the properties of QtObject will not be visible outside of Item. So it is a way of declaring private properties in QML. They are not really private... but kind of ;-)
+since QtObject is lighter (less memory etc.) than an Item, in some cases it might be a good idea to use a QtObject as a container for frequently used properties, accessed by many components within a file or project (think of it as a "style definition" file, holding default margins, colours etc. in your app), especially if you also declare these properties as readonly
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+
+
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
+
+Generally, usage of implicitHeight/Width only makes sense within reusable components.
+
+It gives a hint, of the natural size of the Item without enforcing this size.
+
+When you want to set dimension of a root node of a reusable component, set implicitWidth/Height.
+In some cases, set it for non-root-nodes, if the nodes are exposed as a property.
+Do so only, if you have a reason for it (many official components come without any).
+When you use a component, set width/height.
+
+# [[ ----------------------------------------------------------------------- ]]
+# [[ ----------------------------------------------------------------------- ]]
