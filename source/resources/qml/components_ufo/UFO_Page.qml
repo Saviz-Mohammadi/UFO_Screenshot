@@ -11,7 +11,7 @@ Item {
     implicitWidth: 300
     implicitHeight: 300
 
-    default property alias content: columnLayout_1.children
+    default property alias content: columnLayout_1.data
     property int contentSpacing: 7
     property int contentTopMargin: 20
     property int contentBottomMargin: 40

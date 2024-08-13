@@ -5,11 +5,11 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 # [[ ----------------------------------------------------------------------- ]]
 # [[ ----------------------------------------------------------------------- ]]
 
-project("UFO_QML"
+project("UFO_Screenshot"
 
     VERSION 0.0.1
 
-    DESCRIPTION "A simple template for creating QML applications"
+    DESCRIPTION "A simple utility for taking screenshots of desktop screen"
 
     LANGUAGES CXX)
 
@@ -133,6 +133,7 @@ set(RESOURCE_FILES
     # ICONS
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/help.svg"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/settings.svg"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/imagesmode.svg"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Application icons/ufo.png"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Application icons/ufo.ico"
 
@@ -168,8 +169,11 @@ set(RESOURCE_FILES
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_ufo/UFO_TextField.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_ufo/UFO_Button.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_custom/UFO_RoundProgressBar.qml"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_custom/UFO_SelectionArea.qml"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_custom/UFO_SelectionCircle.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/pages/UFO_About.qml"
-    "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/pages/UFO_Settings.qml")
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/pages/UFO_Settings.qml"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/pages/UFO_Snipp.qml")
 
 # [[ ----------------------------------------------------------------------- ]]
 # [[ ----------------------------------------------------------------------- ]]

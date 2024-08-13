@@ -1,4 +1,5 @@
 #include "main.hpp"
+#include <QScreen>
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,24 @@ int main(int argc, char *argv[])
     // If you are not seeing the icon change under a Linux machine, it maybe because of Wayland.
     // Wayland is new and is really problematic.
     QGuiApplication::setWindowIcon(QIcon("./resources/icons/Application icons/ufo.png"));
+
+    QScreen *screen = QGuiApplication::primaryScreen();
+
+    if (screen) {
+        // Get screen size in pixels
+        QRect screenGeometry = screen->geometry();
+        int screenWidth = screenGeometry.width();
+        int screenHeight = screenGeometry.height();
+
+        // Output the screen dimensions
+        qDebug() << "Screen width:" << screenWidth;
+        qDebug() << "Screen height:" << screenHeight;
+
+        engine.rootContext()->setContextProperty("cppScreenWidth",screenWidth);
+        engine.rootContext()->setContextProperty("cppScreenHeight",screenHeight);
+    } else {
+        qDebug() << "No primary screen found!";
+    }
 
     // Load main.qml to start the engine. (Relative path from executable)
     engine.load("./resources/qml/main.qml");

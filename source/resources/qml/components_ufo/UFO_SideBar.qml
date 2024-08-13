@@ -50,28 +50,28 @@ Item {
                     clip: true
                     spacing: 10
 
-                    // UFO_SideBarButton {
-                    //     id: ufo_SidBarButton_1
+                    UFO_SideBarButton {
+                        id: ufo_SidBarButton_1
 
-                    //     Layout.fillWidth: true
-                    //     Layout.preferredHeight: 40
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 40
 
-                    //     Layout.leftMargin: 15
-                    //     Layout.rightMargin: 15
+                        Layout.leftMargin: 15
+                        Layout.rightMargin: 15
 
-                    //     ButtonGroup.group: buttonGroup_1
+                        ButtonGroup.group: buttonGroup_1
 
-                    //     checkable: true
-                    //     autoExclusive: true
-                    //     checked: false
+                        checkable: true
+                        autoExclusive: true
+                        checked: false
 
-                    //     text: qsTr("New page")
-                    //     svg: "./../../icons/Google icons/<icon-name>.svg"
+                        text: qsTr("Snipp")
+                        svg: "./../../icons/Google icons/imagesmode.svg"
 
-                    //     onClicked: {
-                    //         root.tabChanged("Page name")
-                    //     }
-                    // }
+                        onClicked: {
+                            root.tabChanged("Snipp page")
+                        }
+                    }
 
                     // Add more tabs here...
                 }
@@ -98,7 +98,7 @@ Item {
             }
 
             UFO_SideBarButton {
-                id: ufo_SidBarButton_3
+                id: ufo_SidBarButton_Settings
 
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
@@ -122,7 +122,7 @@ Item {
             }
 
             UFO_SideBarButton {
-                id: ufo_SidBarButton_4
+                id: ufo_SidBarButton_About
 
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40

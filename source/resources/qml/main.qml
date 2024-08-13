@@ -139,6 +139,13 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            UFO_Snipp {
+                id: ufo_Snipp
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
             UFO_Settings {
                 id: ufo_Settings
 
@@ -159,6 +166,9 @@ ApplicationWindow {
                 function onTabChanged(pageName) {
                     switch (pageName) {
 
+                    case "Snipp page":
+                        stackLayout_1.currentIndex = ufo_Snipp.StackLayout.index
+                        break
                     case "Settings page":
                         stackLayout_1.currentIndex = ufo_Settings.StackLayout.index
                         break
