@@ -171,6 +171,7 @@ set(RESOURCE_FILES
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_custom/UFO_RoundProgressBar.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_custom/UFO_SelectionArea.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_custom/UFO_SelectionCircle.qml"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/components_custom/UFO_ScreenItem.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/pages/UFO_About.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/pages/UFO_Settings.qml"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/qml/pages/UFO_Snipp.qml")
@@ -334,7 +335,8 @@ add_subdirectory("${CMAKE_SOURCE_DIR}/internal_libraries")
 target_link_libraries(${EXECUTABLE_NAME}
 
     PRIVATE
-    "Lib_AppTheme")
+    "Lib_AppTheme"
+    "Lib_Screenshot")
 
 # [[ ----------------------------------------------------------------------- ]]
 # [[ ----------------------------------------------------------------------- ]]

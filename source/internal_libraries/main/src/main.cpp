@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 void registerTypes()
 {
     qmlRegisterSingletonType<AppTheme>("AppTheme", 1, 0, "AppTheme", &AppTheme::qmlInstance);
+    qmlRegisterSingletonType<Screenshot>("Screenshot", 1, 0, "Screenshot", &Screenshot::qmlInstance);
 }
 
 void setupThemeSystem()

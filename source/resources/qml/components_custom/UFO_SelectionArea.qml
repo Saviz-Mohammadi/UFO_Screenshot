@@ -70,8 +70,13 @@ Window {
             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                 console.log("Global Enter key pressed");
 
-                // Probably a good idea to change this to send screen too. But, for now this is just a test
-                root.selected(mainRect.x, mainRect.y, mainRect.width, mainRect.height)
+                root.selected(
+                    //root.screen,
+                    mainRect.x,
+                    mainRect.y,
+                    mainRect.width,
+                    mainRect.height
+                )
 
                 event.accepted = true;  // Prevent other items from handling this event
                 root.destroy(0)
