@@ -120,14 +120,13 @@ void Screenshot::takeScreenshot(const QString &screenName)
         {
             // Grab entire screen
             // I have since found out that grabWindow doesn’t work under Wayland. So I either have to find another way or resort to X11 again.
-            QPixmap output = selectedScreen->grabWindow(0, selectedScreen->geometry().x(), selectedScreen->geometry().y(), selectedScreen->geometry().width(), selectedScreen->geometry().height());
 
 
-            //     setScreenshot(
+            setScreenshot(
+                selectedScreen->grabWindow()
+                );
 
-            // );
-
-            if (output.isNull()) {
+            if (m_Screenshot.isNull()) {
                 qDebug() << "Pixmap is null.";
             }
 
