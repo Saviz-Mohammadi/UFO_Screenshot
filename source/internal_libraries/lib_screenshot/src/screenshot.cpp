@@ -275,6 +275,9 @@ void Screenshot::setScreenshot(QPixmap newScreenshot)
     // So, for now I just change it no matter what.
 
     m_Screenshot = newScreenshot.copy(); // Performing deep copy.
+
+    // Make a path to cache folder and save file.
+    //m_Screenshot
     emit screenshotChanged();
 }
 

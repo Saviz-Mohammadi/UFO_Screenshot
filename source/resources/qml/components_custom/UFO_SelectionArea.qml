@@ -39,34 +39,6 @@ Window {
         }
 
         Keys.onPressed: (event)=> {
-            if (event.key === Qt.Key_Left) {
-                console.log("Global Left key pressed");
-
-                event.accepted = true;  // Prevent other items from handling this event
-                return;
-            }
-
-            if (event.key === Qt.Key_Right) {
-                console.log("Global Right key pressed");
-
-                event.accepted = true;  // Prevent other items from handling this event
-                return;
-            }
-
-            if (event.key === Qt.Key_Up) {
-                console.log("Global Up key pressed");
-
-                event.accepted = true;  // Prevent other items from handling this event
-                return;
-            }
-
-            if (event.key === Qt.Key_Down) {
-                console.log("Global Down key pressed");
-
-                event.accepted = true;  // Prevent other items from handling this event
-                return;
-            }
-
             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                 console.log("Global Enter key pressed");
 

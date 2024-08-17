@@ -47,24 +47,27 @@ UFO_Page {
         properties.y = y
         properties.width = width
         properties.height = height
+
+        Screenshot.initiateScreenshot(properties.selectedScreen, properties.x,
+                                      properties.y, properties.width,
+                                      properties.height)
+    }
+
+    function onCustomAreaCancled() {
+        showNormal()
     }
 
     QtObject {
         id: properties
 
-        enum CaptureMode {
-            FullScreen = 0,
-            CustomArea = 1
-        }
-
-        property int selectedCaptureMode: 0 // Enums are int
+        property int selectedCaptureMode: 0
         property string selectedScreen: ""
+        property string path: ""
         property bool screenIsSelected: false // Just to make sure that user selects a screen before taking screenshot
         property int x: 0
         property int y: 0
         property int width: 0
         property int height: 0
-        property string path: ""
     }
 
     FileDialog {
@@ -115,6 +118,7 @@ UFO_Page {
     Image {
         id: image_Preview
         // TODO Probably a good idea to make the initial value of screenshot to be a black box in construcor of Screenshot.
+        source: Screenshot.screenshot
         Layout.fillWidth: true
         Layout.preferredHeight: 500
         fillMode: Image.PreserveAspectFit
@@ -166,6 +170,7 @@ UFO_Page {
                     var selectionArea = component.createObject(root)
 
                     selectionArea.selected.connect(onAreaSelected)
+                    selectionArea.canceled.connect(onCustomAreaCancled)
 
                     for (var j = 0; j < Qt.application.screens.length; j++) {
 
@@ -175,11 +180,6 @@ UFO_Page {
                         }
                     }
 
-                    Screenshot.initiateScreenshot(properties.selectedScreen,
-                                                  properties.x, properties.y,
-                                                  properties.width,
-                                                  properties.height)
-
                     return
                 }
             }
@@ -187,19 +187,11 @@ UFO_Page {
 
         // TODO See if you can turn this into enum instead:
         UFO_ComboBox {
-            Layout.preferredWidth: 200
+            Layout.preferredWidth: 120
             model: ["Full Screen", "Custom Area"]
 
             onCurrentIndexChanged: {
-                if (currentText === "Full Screen") {
-                    properties.selectedCaptureMode = 0
-                    return
-                }
-
-                if (currentText === "Custom Area") {
-                    properties.selectedCaptureMode = 1
-                    return
-                }
+                properties.selectedCaptureMode = currentIndex
             }
         }
 
@@ -232,7 +224,6 @@ UFO_Page {
         target: Screenshot
 
         function onScreenshotChanged() {
-            image_Preview.source = Screenshot.screenshot
             showNormal()
         }
     }
