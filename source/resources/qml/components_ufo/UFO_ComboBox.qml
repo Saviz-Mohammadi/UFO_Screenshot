@@ -62,10 +62,10 @@ ComboBox {
         implicitHeight: 40
 
         color: Qt.color(AppTheme.colors["UFO_ComboBox_Background"])
+        border.width: root.visualFocus ? 2 : 1
         border.color: root.pressed ? Qt.color(
                                          AppTheme.colors["UFO_ComboBox_Border_Pressed"]) : Qt.color(
                                          AppTheme.colors["UFO_ComboBox_Border_Normal"])
-        border.width: root.visualFocus ? 2 : 1
         radius: 0
     }
 

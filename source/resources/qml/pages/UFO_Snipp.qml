@@ -16,7 +16,7 @@ UFO_Page {
     id: root
 
     title: qsTr("Screenshot tool")
-    contentSpacing: 20
+    contentSpacing: 25
 
     function onScreenSelected(sender, screenName) {
 
@@ -115,31 +115,52 @@ UFO_Page {
         }
     }
 
-    Image {
-        id: image_Preview
-        // TODO Probably a good idea to make the initial value of screenshot to be a black box in construcor of Screenshot.
-        source: Screenshot.screenshot
+    UFO_GroupBox {
+        id: ufo_GroupBox_1
+
         Layout.fillWidth: true
-        Layout.preferredHeight: 500
-        fillMode: Image.PreserveAspectFit
-        smooth: true
-    }
+        // No point setting "Layout.fillHeight" as "UFO_Page" ignores height to enable vertical scrolling.
 
-    Flow {
-        spacing: 10
+        title: qsTr("Available Screens")
+        contentSpacing: 0
 
-        Repeater {
-            id: repeater_1
+        Text {
+            id: text_1
 
-            model: Qt.application.screens
+            Layout.fillWidth: true
 
-            delegate: UFO_ScreenItem {
+            Layout.topMargin: 20
+            Layout.bottomMargin: 0
+            Layout.leftMargin: 15
+            Layout.rightMargin: 15
 
-                screenName: modelData.name
+            color: Qt.color(AppTheme.colors["UFO_GroupBox_Content_Text"])
 
-                Component.onCompleted: {
-                    // Connect the clicked signal of each item to a JavaScript function
-                    screenSelected.connect(root.onScreenSelected)
+            text: qsTr("The following are the detected screens of your machine. Plesae choose one before attempting to capture the screen")
+
+            wrapMode: Text.WordWrap
+            elide: Text.ElideRight
+        }
+
+        Flow {
+            spacing: 10
+
+            Layout.fillWidth: true
+            Layout.margins: 10
+
+            Repeater {
+                id: repeater_1
+
+                model: Qt.application.screens
+
+                delegate: UFO_ScreenItem {
+
+                    screenName: modelData.name
+
+                    Component.onCompleted: {
+                        // Connect the clicked signal of each item to a JavaScript function
+                        screenSelected.connect(root.onScreenSelected)
+                    }
                 }
             }
         }
@@ -148,10 +169,13 @@ UFO_Page {
     RowLayout {
         id: rowLayout_1
 
+        Layout.fillWidth: true
+
         UFO_Button {
             text: qsTr("Capture")
 
             enabled: properties.screenIsSelected
+            svg: "./../../icons/Google icons/photo_camera.svg"
 
             onClicked: {
 
@@ -187,7 +211,10 @@ UFO_Page {
 
         // TODO See if you can turn this into enum instead:
         UFO_ComboBox {
+
             Layout.preferredWidth: 120
+            Layout.preferredHeight: 35
+
             model: ["Full Screen", "Custom Area"]
 
             onCurrentIndexChanged: {
@@ -197,12 +224,18 @@ UFO_Page {
 
         Item {
             Layout.fillWidth: true
+            Layout.fillHeight: true
         }
 
         UFO_Button {
 
             enabled: Screenshot.screenshotExists
             text: qsTr("Save As")
+
+            Layout.preferredWidth: 120
+            Layout.preferredHeight: 40
+
+            svg: "./../../icons/Google icons/save_as.svg"
 
             onClicked: {
                 fileDialog.open()
@@ -212,11 +245,37 @@ UFO_Page {
         UFO_Button {
 
             enabled: Screenshot.screenshotExists
-            text: qsTr("Show Full Screen")
+            text: qsTr("Maximize")
+
+            Layout.preferredWidth: 120
+            Layout.preferredHeight: 40
+
+            svg: "./../../icons/Google icons/fullscreen.svg"
 
             onClicked: {
 
             }
+        }
+    }
+
+    Rectangle {
+        id: rectangle_1
+
+        Layout.fillWidth: true
+        Layout.preferredHeight: Math.round(root.width / 2)
+
+        border.color: "cornflowerblue"
+        border.width: 2
+
+        Image {
+            id: image_Preview
+
+            anchors.fill: parent
+
+            // TODO Probably a good idea to make the initial value of screenshot to be a black box in construcor of Screenshot.
+            source: Screenshot.screenshot
+            fillMode: Image.PreserveAspectFit
+            smooth: true
         }
     }
 

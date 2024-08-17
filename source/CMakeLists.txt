@@ -134,6 +134,9 @@ set(RESOURCE_FILES
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/help.svg"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/settings.svg"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/imagesmode.svg"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/fullscreen.svg"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/photo_camera.svg"
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Google icons/save_as.svg"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Application icons/ufo.png"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Application icons/ufo.ico"
 

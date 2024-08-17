@@ -65,7 +65,7 @@ Item {
                         autoExclusive: true
                         checked: false
 
-                        text: qsTr("Snipp")
+                        text: qsTr("Screenshot")
                         svg: "./../../icons/Google icons/imagesmode.svg"
 
                         onClicked: {

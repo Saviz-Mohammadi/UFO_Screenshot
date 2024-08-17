@@ -34,7 +34,7 @@ Window {
         opacity: 0.5
 
         border {
-            color: "red"
+            color: "cornflowerblue"
             width: 3
         }
 
