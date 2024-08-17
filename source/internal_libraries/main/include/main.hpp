@@ -3,6 +3,7 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QScreen>
 #include <QQmlContext>
 #include <QFontDatabase>
 #include <QIcon>

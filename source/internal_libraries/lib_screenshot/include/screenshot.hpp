@@ -11,6 +11,7 @@
 #include <QGuiApplication>
 #include <QQmlEngine>
 #include <QBuffer>
+#include <QUrl>
 
 class Screenshot : public QObject
 {
@@ -18,6 +19,11 @@ class Screenshot : public QObject
     Q_DISABLE_COPY_MOVE(Screenshot) // Needed for Singleton pattern.
 
     // Q_PROPERTY;
+
+    // This might be surprising, I need to explain this:
+    // After doing some massive research, it turns out the only way to fully sync a QPixmap with QML is by
+    // subclassing a type called "QQuikcImageProvider" or something like that. This is way too complicated in my
+    // opinnion. So, instead what we do is send the image data through a String stream. For our purposes this should be enough for now.
     Q_PROPERTY(QString screenshot READ getScreenshot NOTIFY screenshotChanged)
     Q_PROPERTY(bool screenshotExists READ getScreenshotExists NOTIFY screenshotExistsChanged)
 
@@ -32,7 +38,7 @@ public:
     // Fields;
 private:
     static Screenshot *m_Instance;
-    QPixmap m_Screenshot; // Use an "Image" element with this in qml
+    QPixmap m_Screenshot;
     bool m_ScreenshotExists;
     quint64 m_Delay;
 
@@ -40,18 +46,20 @@ private:
 signals:
     void screenshotChanged();
     void screenshotExistsChanged();
-    void screenshotSaveSuccessful();
-    void screenshotSaveUnsuccessful();
+    void saveSuccessful();
+    void saveUnsuccessful();
 
     // PUBLIC Methods;
 public:
-    Q_INVOKABLE void takeScreenshot(const QString &screenName); // Full screen
-    Q_INVOKABLE void takeScreenshot(const QString &screenName, float x, float y, qint64 width, qint64 height); // Custom area
+    Q_INVOKABLE void initiateScreenshot(const QString &screenName);
+    Q_INVOKABLE void initiateScreenshot(const QString &screenName, qreal x, qreal y, qint64 width, qint64 height);
     Q_INVOKABLE bool fileExists(const QString &path);
-    Q_INVOKABLE void saveScreenshot(const QString &path);
+    Q_INVOKABLE void saveScreenshot(QUrl path);
 
     // PRIVATE Methods;
 private:
+    void takeScreenshot(const QString &screenName);
+    void takeScreenshot(const QString &screenName, qreal x, qreal y, qint64 width, qint64 height);
 
     // PUBLIC Getters
 public:
@@ -60,7 +68,7 @@ public:
 
     // PRIVATE Setters
 private:
-    void setScreenshot(const QPixmap &newScreenshot);
+    void setScreenshot(QPixmap newScreenshot);
     void setScreenshotExists(bool newScreenshotExists);
 };
 

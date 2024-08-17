@@ -10,10 +10,14 @@ Screenshot::Screenshot(QObject *parent, const QString& name)
     : QObject{parent}
     , m_Screenshot(QPixmap{})
     , m_ScreenshotExists(false)
-    , m_Delay(quint64(900))
+    , m_Delay(quint64(875))
 {
     this->setObjectName(name);
 
+    // Display a black box as initial value of "m_Screenshot".
+    QPixmap pixmap(1920, 1080);
+    pixmap.fill(Qt::black);
+    setScreenshot(pixmap);
 
 
 // Debugging
@@ -39,9 +43,6 @@ Screenshot::~Screenshot()
              << "* Message     : Call to Destructor"
              << "\n**************************************************\n\n";
 #endif
-
-             // For more information, search about an operating system's scale factor;
-            // copy.setDevicePixelRatio(primaryScreen->devicePixelRatio());
 }
 
 Screenshot *Screenshot::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine)
@@ -80,108 +81,29 @@ Screenshot *Screenshot::cppInstance(QObject *parent)
 // [[------------------------------------------------------------------------]]
 // [[------------------------------------------------------------------------]]
 
-// This method is for FullScreen.
-void Screenshot::takeScreenshot(const QString &screenName)
+void Screenshot::initiateScreenshot(const QString &screenName)
 {
-    qDebug() << "Full screen method called";
-    QScreen* selectedScreen = nullptr;
-
-    // Find the screen with the specified name;
-    for (QScreen *screen : QGuiApplication::screens())
-    {
-        if (screen->name() == screenName)
-        {
-            selectedScreen = screen;
-            break;
-        }
-    }
-
-    if(selectedScreen == nullptr)
-    {
-        qDebug() << "Screen is null";
-    }
-
-    if (!selectedScreen) {
-        qDebug() << "Error: No screen found with name" << screenName;
-    }
-
-
-    qDebug() << "Screen geometry:" << selectedScreen->geometry();
-    qDebug() << "Device pixel ratio:" << selectedScreen->devicePixelRatio();
-
-
-    // Wait for 850 miliseconds before calling the method;
-    // This makes sure that the window has enough time to hide;
+    // Waiting makes sure that the window has enough time to hide;
     QTimer::singleShot(
 
-        850,
+        m_Delay,
         this,
-        [this, selectedScreen]()
-        {
-            // Grab entire screen
-            // I have since found out that grabWindow doesn’t work under Wayland. So I either have to find another way or resort to X11 again.
-
-
-            setScreenshot(
-                selectedScreen->grabWindow()
-                );
-
-            if (m_Screenshot.isNull()) {
-                qDebug() << "Pixmap is null.";
-            }
-
-            // m_Screenshot.setDevicePixelRatio(
-            //     selectedScreen->devicePixelRatio()
-            // );
-
-            setScreenshotExists(true);
+        [this, screenName]() {
+            this->takeScreenshot(screenName);
         }
     );
 }
 
-// This method is for SelectedArea.
-void Screenshot::takeScreenshot(const QString &screenName, float x, float y, qint64 width, qint64 height)
+void Screenshot::initiateScreenshot(
+    const QString &screenName, qreal x, qreal y, qint64 width, qint64 height)
 {
-    QScreen* selectedScreen = nullptr;
-
-    // Find the screen with the specified name;
-    for (QScreen *screen : QGuiApplication::screens())
-    {
-        if (screen->name() == screenName)
-        {
-            selectedScreen = screen;
-            break;
-        }
-    }
-
-    // Wait for 850 miliseconds before calling the method;
-    // This makes sure that the window has enough time to hide;
+    // Waiting makes sure that the window has enough time to hide;
     QTimer::singleShot(
 
-        850,
+        m_Delay,
         this,
-        [this, selectedScreen, x, y, width, height]()
-        {
-            // Grab entire screen
-            setScreenshot(
-                selectedScreen->grabWindow(
-                    0,
-                    x,
-                    y,
-                    width,
-                    height
-                )
-            );
-
-            if (m_Screenshot.isNull()) {
-                qDebug() << "Pixmap is null.";
-            }
-
-            // m_Screenshot.setDevicePixelRatio(
-            //     selectedScreen->devicePixelRatio()
-            // );
-
-            setScreenshotExists(true);
+        [this, screenName, x, y, width, height]() {
+            this->takeScreenshot(screenName, x, y, width, height);
         }
     );
 }
@@ -198,31 +120,17 @@ bool Screenshot::fileExists(const QString &path)
     return (false);
 }
 
-void Screenshot::saveScreenshot(const QString &path)
+void Screenshot::saveScreenshot(QUrl path)
 {
-    // The following checks are assumed to be already done in qml:
-    //
-    // Save button is enabled via screenShotExits (THis way we don't have to manulaly check if Qpixmap is not null)
-    // Selecting file path.
-    // Making sure file path is not empty.
-    // Handle if file exists already.
+    //qDebug() << "The path was: " << path.toLocalFile();
+    bool success = m_Screenshot.save(path.toLocalFile(), nullptr);
 
-    if (m_Screenshot.isNull()) {
-        qDebug() << "Pixmap is null.";
-    }
-
-    bool success = m_Screenshot.save(
-        path,
-        "PNG"
-    );
-
-    if(success == false)
+    if(!success)
     {
-        emit screenshotSaveUnsuccessful();
-        qDebug() << "Save unsuccesful!";
+        emit saveUnsuccessful();
     }
 
-    emit screenshotSaveSuccessful();
+    emit saveSuccessful();
 }
 
 // [[------------------------------------------------------------------------]]
@@ -236,6 +144,83 @@ void Screenshot::saveScreenshot(const QString &path)
 // [[------------------------------------------------------------------------]]
 // [[------------------------------------------------------------------------]]
 
+// This method is for "FullScreen".
+void Screenshot::takeScreenshot(const QString &screenName)
+{
+    QScreen* selectedScreen = nullptr;
+
+    // Find the screen with the specified name;
+    for (QScreen *screen : QGuiApplication::screens())
+    {
+        if (screen->name() == screenName)
+        {
+            selectedScreen = screen;
+            break;
+        }
+    }
+
+    //qDebug() << screenName;
+    //qDebug() << selectedScreen->name();
+
+
+    // The "grabWindow()" function doesn’t work under Wayland.
+    //m_Screenshot = ;
+
+    //output.save("./testing.png", nullptr);
+
+    setScreenshot(
+        selectedScreen->grabWindow(0)
+    );
+
+    //            m_Screenshot.setDevicePixelRatio(
+    //                selectedScreen->devicePixelRatio()
+    //            );
+
+    if(m_Screenshot.isNull())
+    {
+        qDebug() << "is null";
+        return;
+    }
+
+    //m_Screenshot.copy(output);
+    emit screenshotChanged();
+
+    setScreenshotExists(true);
+}
+
+// This method is for "CustomArea".
+void Screenshot::takeScreenshot(const QString &screenName, qreal x, qreal y, qint64 width, qint64 height)
+{
+    QScreen* selectedScreen = nullptr;
+
+    // Find the screen with the specified name;
+    for (QScreen *screen : QGuiApplication::screens())
+    {
+        if (screen->name() == screenName)
+        {
+            selectedScreen = screen;
+            break;
+        }
+    }
+
+
+    // The "grabWindow()" function doesn’t work under Wayland.
+    setScreenshot(
+        selectedScreen->grabWindow(
+            0,
+            x,
+            y,
+            width,
+            height
+            )
+        );
+
+    //            m_Screenshot.setDevicePixelRatio(
+    //                selectedScreen->devicePixelRatio()
+    //            );
+
+    setScreenshotExists(true);
+}
 
 // [[------------------------------------------------------------------------]]
 // [[------------------------------------------------------------------------]]
@@ -248,15 +233,19 @@ void Screenshot::saveScreenshot(const QString &path)
 // [[------------------------------------------------------------------------]]
 // [[------------------------------------------------------------------------]]
 
+// I honestly think it may be better to just save to cache and link to file for this one
 QString Screenshot::getScreenshot() const
 {
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
 
     buffer.open(QIODevice::WriteOnly);
-    int quality = 100; // (default) compressed data, slower // int quality = 100; // large uncompressed data, faster
 
-    m_Screenshot.toImage().save(&buffer, "png", quality);
+    // -1 = compressed data (slower)
+    // 100 = large uncompressed data (faster)
+    int quality = 100;
+
+    m_Screenshot.toImage().save(&buffer, nullptr, quality);
     QString base64 = QString::fromUtf8(byteArray.toBase64());
 
     buffer.close();
@@ -280,11 +269,12 @@ bool Screenshot::getScreenshotExists() const
 // [[------------------------------------------------------------------------]]
 // [[------------------------------------------------------------------------]]
 
-void Screenshot::setScreenshot(const QPixmap &newScreenshot)
+void Screenshot::setScreenshot(QPixmap newScreenshot)
 {
-    // QPixmaps cannot be compared in an easy way.
+    // It is not easy to compare a QPixmaps.
+    // So, for now I just change it no matter what.
 
-    m_Screenshot = newScreenshot.copy();
+    m_Screenshot = newScreenshot.copy(); // Performing deep copy.
     emit screenshotChanged();
 }
 

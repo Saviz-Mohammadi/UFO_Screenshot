@@ -15,30 +15,34 @@ import Screenshot 1.0
 UFO_Page {
     id: root
 
-    title: qsTr("Snipp tool")
+    title: qsTr("Screenshot tool")
     contentSpacing: 20
 
-    function onScreenSelected(screenName) {
-        console.log("Screen clicked:", screenName)
+    function onScreenSelected(sender, screenName) {
 
-        for (var i = 0; i < Qt.application.screens.length; i++)
-        {
-            if (Qt.application.screens[i].name === screenName)
-            {
-                properties.selectedScreen = Qt.application.screens[i].name;
-                break;
+        for (var i = 0; i < repeater_1.count; i++) {
+            var item = repeater_1.itemAt(i)
+
+            item.selected = false
+        }
+
+        // Highlight only the element that was selected
+        sender.selected = true
+
+        for (var j = 0; j < Qt.application.screens.length; j++) {
+
+            if (Qt.application.screens[j].name === screenName) {
+                properties.selectedScreen = Qt.application.screens[j].name
+                break
             }
+        }
+
+        if (properties.selectedScreen !== "") {
+            properties.screenIsSelected = true
         }
     }
 
     function onAreaSelected(x, y, width, height) {
-        // console.log("dimensions recieved!");
-
-        // console.log("recieved x:" + x);
-        // console.log("recieved y:" + y);
-        // console.log("recieved width:" + width);
-        // console.log("recieved hieght:" + height);
-
         properties.x = x
         properties.y = y
         properties.width = width
@@ -55,33 +59,64 @@ UFO_Page {
 
         property int selectedCaptureMode: 0 // Enums are int
         property string selectedScreen: ""
+        property bool screenIsSelected: false // Just to make sure that user selects a screen before taking screenshot
         property int x: 0
         property int y: 0
         property int width: 0
         property int height: 0
+        property string path: ""
     }
 
     FileDialog {
         id: fileDialog
 
-        title: "Save File"
+        title: "Save Screenshot"
         fileMode: FileDialog.SaveFile
-        nameFilters: ["Image files (*.png)"]
-        currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+        nameFilters: ["Image files (*.png *.jpg *.jpeg)"]
+        currentFolder: StandardPaths.writableLocation(
+                           StandardPaths.PicturesLocation)
         defaultSuffix: ".png"
 
         onAccepted: {
             // Handle the selected file path
             console.log("Selected file path:", fileDialog.selectedFile)
+
+            if (Screenshot.fileExists(fileDialog.selectedFile)) {
+
+                properties.path = fileDialog.selectedFile
+                warningDialog.open()
+                return
+            }
+
             Screenshot.saveScreenshot(fileDialog.selectedFile)
         }
     }
 
+    MessageDialog {
+        id: warningDialog
+
+        title: "Warning"
+        informativeText: "This file already exists. Do you want to replace it?"
+
+        modality: Qt.Window
+
+        buttons: MessageDialog.Ok | MessageDialog.Cancel
+
+        onRejected: {
+
+            // Maybe display a popup here saying "Save canceled"
+        }
+
+        onAccepted: {
+            Screenshot.saveScreenshot(properties.path)
+        }
+    }
+
     Image {
+        id: image_Preview
         // TODO Probably a good idea to make the initial value of screenshot to be a black box in construcor of Screenshot.
         Layout.fillWidth: true
         Layout.preferredHeight: 500
-        source: Screenshot.screenshot
         fillMode: Image.PreserveAspectFit
         smooth: true
     }
@@ -90,13 +125,13 @@ UFO_Page {
         spacing: 10
 
         Repeater {
+            id: repeater_1
+
             model: Qt.application.screens
 
             delegate: UFO_ScreenItem {
 
                 screenName: modelData.name
-
-                //thumbnail.source: Qt.resolvedUrl("path_to_thumbnail/" + model.name + ".png") // Adjust path
 
                 Component.onCompleted: {
                     // Connect the clicked signal of each item to a JavaScript function
@@ -112,26 +147,40 @@ UFO_Page {
         UFO_Button {
             text: qsTr("Capture")
 
+            enabled: properties.screenIsSelected
+
             onClicked: {
 
-                showMinimized(); // Minimize the main window
+                // TODO I am not sure if this is possible, but maybe it would be just easier to hide the window instead of
+                // minimizing and showing it.
+                showMinimized() // Minimize the main window
 
-                if(properties.selectedCaptureMode === 0)
-                {
-                    Screenshot.takeScreenshot(properties.selectedScreen)
-                    return;
+                if (properties.selectedCaptureMode === 0) {
+                    Screenshot.initiateScreenshot(properties.selectedScreen)
+                    return
                 }
 
-                if(properties.selectedCaptureMode === 1)
-                {
-                    var component = Qt.createComponent("./../components_custom/UFO_SelectionArea.qml");
-                    var selectionArea = component.createObject(root);
+                if (properties.selectedCaptureMode === 1) {
+                    var component = Qt.createComponent(
+                                "./../components_custom/UFO_SelectionArea.qml")
+                    var selectionArea = component.createObject(root)
 
                     selectionArea.selected.connect(onAreaSelected)
 
-                    Screenshot.takeScreenshot(properties.selectedScreen, x, y, width, height)
+                    for (var j = 0; j < Qt.application.screens.length; j++) {
 
-                    return;
+                        if (Qt.application.screens[j].name === properties.selectedScreen) {
+                            selectionArea.screen = Qt.application.screens[j]
+                            break
+                        }
+                    }
+
+                    Screenshot.initiateScreenshot(properties.selectedScreen,
+                                                  properties.x, properties.y,
+                                                  properties.width,
+                                                  properties.height)
+
+                    return
                 }
             }
         }
@@ -142,16 +191,14 @@ UFO_Page {
             model: ["Full Screen", "Custom Area"]
 
             onCurrentIndexChanged: {
-                if(currentText === "Full Screen")
-                {
-                    properties.selectedCaptureMode = properties.CaptureMode.FullScreen
-                    return;
+                if (currentText === "Full Screen") {
+                    properties.selectedCaptureMode = 0
+                    return
                 }
 
-                if(currentText === "Custom Area")
-                {
-                    properties.selectedCaptureMode = properties.CaptureMode.CustomArea
-                    return;
+                if (currentText === "Custom Area") {
+                    properties.selectedCaptureMode = 1
+                    return
                 }
             }
         }
@@ -185,6 +232,7 @@ UFO_Page {
         target: Screenshot
 
         function onScreenshotChanged() {
+            image_Preview.source = Screenshot.screenshot
             showNormal()
         }
     }

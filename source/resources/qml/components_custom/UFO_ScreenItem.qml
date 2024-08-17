@@ -8,7 +8,7 @@ import AppTheme 1.0
 Rectangle {
     id: root
 
-    signal screenSelected(string screenName)
+    signal screenSelected(Rectangle sender, string screenName)
 
     property bool selected: false
     property alias screenName: name.text
@@ -16,23 +16,15 @@ Rectangle {
     width: 200
     height: 150
 
-    border.color: "black"
-    border.width: 1
-
-
-    // Image {
-    //     id: thumbnail
-    //     source: ""  // Set this dynamically
-    //     anchors.fill: parent
-    //     fillMode: Image.PreserveAspectFit
-    // }
+    border.color: selected ? "cornflowerblue" : "transparent"
+    border.width: selected ? 2 : 0
 
     Text {
         id: name
-        text: "Screen Name"  // Set this dynamically
+        text: "Screen Name" // Set this dynamically
         anchors.centerIn: parent
         color: "black"
-        font.pixelSize: 14
+        font.pixelSize: 14 // TODO change this to by dynamic font size
 
         z: 1
     }
@@ -43,10 +35,7 @@ Rectangle {
         z: 2
 
         onClicked: {
-            // Signal to change screen in QObject
-            //console.log("Screen clicked:", screenName)
-
-            root.screenSelected(root.screenName)
+            root.screenSelected(root, root.screenName)
         }
     }
 }
