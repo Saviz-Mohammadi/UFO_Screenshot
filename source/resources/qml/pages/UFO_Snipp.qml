@@ -253,7 +253,9 @@ UFO_Page {
             svg: "./../../icons/Google icons/fullscreen.svg"
 
             onClicked: {
-
+                var component = Qt.createComponent(
+                            "./../components_custom/UFO_FullScreen.qml")
+                var fullScreen = component.createObject(root)
             }
         }
     }

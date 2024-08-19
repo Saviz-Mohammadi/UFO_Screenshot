@@ -14,6 +14,13 @@ Screenshot::Screenshot(QObject *parent, const QString& name)
 {
     this->setObjectName(name);
 
+    // Probably good idea to refactor this and make it universally accessible.
+    QDir dir("./cache/screenshots");
+
+    if(!dir.exists())
+    {
+        dir.mkpath("./cache/screenshots");
+    }
 
 // Debugging
 #ifdef QT_DEBUG
