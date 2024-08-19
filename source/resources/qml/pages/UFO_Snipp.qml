@@ -271,11 +271,14 @@ UFO_Page {
             id: image_Preview
 
             anchors.fill: parent
-
+            anchors.margins: 15
+            // I believe its a caching thing on the QML side that prevents it re-fetching the data
+            // Also note that you must change the entire image for this to trigger, because changing path is not enough.
             // TODO Probably a good idea to make the initial value of screenshot to be a black box in construcor of Screenshot.
-            source: Screenshot.screenshot
+            //source: Screenshot.screenshot
             fillMode: Image.PreserveAspectFit
             smooth: true
+            cache: false
         }
     }
 
@@ -283,6 +286,9 @@ UFO_Page {
         target: Screenshot
 
         function onScreenshotChanged() {
+            // TODO maybe there could also be a way to trigger this through a call to slot or somethnig that Image has internally.
+            image_Preview.source = "./../../images/black.png"
+            image_Preview.source = Screenshot.screenshot
             showNormal()
         }
     }

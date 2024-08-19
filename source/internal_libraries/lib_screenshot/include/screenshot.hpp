@@ -5,9 +5,11 @@
 #include <QtTypes>
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 #include <QTimer>
 #include <QScreen>
 #include <QPixmap>
+#include <QPainter>
 #include <QGuiApplication>
 #include <QQmlEngine>
 #include <QBuffer>
@@ -24,7 +26,7 @@ class Screenshot : public QObject
     // After doing some massive research, it turns out the only way to fully sync a QPixmap with QML is by
     // subclassing a type called "QQuikcImageProvider" or something like that. This is way too complicated in my
     // opinnion. So, instead what we do is send the image data through a String stream. For our purposes this should be enough for now.
-    Q_PROPERTY(QString screenshot READ getScreenshot NOTIFY screenshotChanged)
+    Q_PROPERTY(QUrl screenshot READ getScreenshot NOTIFY screenshotChanged)
     Q_PROPERTY(bool screenshotExists READ getScreenshotExists NOTIFY screenshotExistsChanged)
 
     // Constructors, Initializers, Destructor
@@ -63,7 +65,7 @@ private:
 
     // PUBLIC Getters
 public:
-    QString getScreenshot() const;
+    QUrl getScreenshot() const;
     bool getScreenshotExists() const;
 
     // PRIVATE Setters

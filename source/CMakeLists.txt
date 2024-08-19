@@ -140,6 +140,9 @@ set(RESOURCE_FILES
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Application icons/ufo.png"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/icons/Application icons/ufo.ico"
 
+    #IMAGES
+    "${RESOURCE_BASE_ORIGIN_LOCATION}/images/black.png"
+
     # TTF
     "${RESOURCE_BASE_ORIGIN_LOCATION}/fonts/Titillium_Web/TitilliumWeb-Black.ttf"
     "${RESOURCE_BASE_ORIGIN_LOCATION}/fonts/Titillium_Web/TitilliumWeb-Bold.ttf"

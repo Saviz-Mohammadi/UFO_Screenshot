@@ -14,11 +14,6 @@ Screenshot::Screenshot(QObject *parent, const QString& name)
 {
     this->setObjectName(name);
 
-    // Display a black box as initial value of "m_Screenshot".
-    QPixmap pixmap(1920, 1080);
-    pixmap.fill(Qt::black);
-    setScreenshot(pixmap);
-
 
 // Debugging
 #ifdef QT_DEBUG
@@ -234,23 +229,15 @@ void Screenshot::takeScreenshot(const QString &screenName, qreal x, qreal y, qin
 // [[------------------------------------------------------------------------]]
 
 // I honestly think it may be better to just save to cache and link to file for this one
-QString Screenshot::getScreenshot() const
+QUrl Screenshot::getScreenshot() const
 {
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
 
-    buffer.open(QIODevice::WriteOnly);
+    // Probably good idea to refactor this and make it universally accessible.
+QDir dir("./cache/screenshots");
 
-    // -1 = compressed data (slower)
-    // 100 = large uncompressed data (faster)
-    int quality = 100;
+m_Screenshot.save("./cache/screenshots/temp.png", nullptr);
 
-    m_Screenshot.toImage().save(&buffer, nullptr, quality);
-    QString base64 = QString::fromUtf8(byteArray.toBase64());
-
-    buffer.close();
-
-    return QString("data:image/png;base64,") + base64;
+return (QUrl::fromLocalFile(dir.absolutePath() + "/temp.png"));
 }
 
 bool Screenshot::getScreenshotExists() const
@@ -275,6 +262,9 @@ void Screenshot::setScreenshot(QPixmap newScreenshot)
     // So, for now I just change it no matter what.
 
     m_Screenshot = newScreenshot.copy(); // Performing deep copy.
+
+    // TODO turn this into pivate slot instead and connect to signal to trigger it
+    m_Screenshot.save("./cache/screenshots/temp.png", nullptr);
 
     // Make a path to cache folder and save file.
     //m_Screenshot
