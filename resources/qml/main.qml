@@ -124,10 +124,13 @@ ApplicationWindow {
 
                 leftPadding: 10
                 rightPadding: 10
-                text: qsTr("About UFO_QML")
+                text: qsTr("About UFO_Screenshot")
 
                 onTriggered: {
                     stackLayout_1.currentIndex = ufo_About.StackLayout.index
+
+                    // Change checked state of side bar.
+                    ufo_SideBar_1.checkTabButton("About")
                 }
             }
         }

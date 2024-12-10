@@ -38,7 +38,7 @@ UFO_Page {
 
             color: Qt.color(AppTheme.colors["UFO_GroupBox_Content_Text"])
 
-            text: qsTr("Name: UFO_QML") + "     " + qsTr("Version: 0.1.1")
+            text: qsTr("Name: UFO_Screenshot") + "     " + qsTr("Version: 0.1.0")
 
             wrapMode: Text.Wrap
             elide: Text.ElideRight
@@ -115,7 +115,7 @@ UFO_Page {
             Layout.leftMargin: 15
             Layout.rightMargin: 15
 
-            text: qsTr("We welcome contributions to the UFO_QML template! Please visit our GitHub page by clicking the button below for more information.")
+            text: qsTr("We welcome contributions to the UFO_Screenshot application! Please visit our GitHub page by clicking the button below for more information.")
 
             color: Qt.color(AppTheme.colors["UFO_GroupBox_Content_Text"])
             wrapMode: Text.WordWrap
@@ -133,7 +133,7 @@ UFO_Page {
             svg: "./../../icons/Google icons/globe.svg"
 
             onClicked: {
-                Qt.openUrlExternally("https://github.com/Saviz-Mohammadi/UFO_QML")
+                Qt.openUrlExternally("https://github.com/Saviz-Mohammadi/UFO_Screenshot")
             }
         }
     }
