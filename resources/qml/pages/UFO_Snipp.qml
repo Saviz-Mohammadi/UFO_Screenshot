@@ -266,6 +266,7 @@ UFO_Page {
         Layout.fillWidth: true
         Layout.preferredHeight: Math.round(root.width / 2)
 
+        color: Qt.color(AppTheme.colors["UFO_Image_Background"])
         border.color: "cornflowerblue"
         border.width: 2
 

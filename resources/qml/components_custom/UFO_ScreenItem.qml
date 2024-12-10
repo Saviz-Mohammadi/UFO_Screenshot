@@ -16,6 +16,7 @@ Rectangle {
     width: 200
     height: 150
 
+    color: Qt.color(AppTheme.colors["UFO_ScreenItem_Background"])
     border.color: selected ? "cornflowerblue" : "transparent"
     border.width: selected ? 2 : 0
 
@@ -23,7 +24,7 @@ Rectangle {
         id: name
         text: "Screen Name" // Set this dynamically
         anchors.centerIn: parent
-        color: "black"
+        color: Qt.color(AppTheme.colors["UFO_ScreenItem_Text"])
         font.pixelSize: 14 // TODO change this to by dynamic font size
 
         z: 1

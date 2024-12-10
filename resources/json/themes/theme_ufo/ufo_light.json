@@ -123,5 +123,10 @@
 
     "UFO_SplitView_Handle_Normal": "Color_Light_8",
     "UFO_SplitView_Handle_Hovered": "Color_Light_8",
-    "UFO_SplitView_Handle_Pressed": "Color_Light_8"
+    "UFO_SplitView_Handle_Pressed": "Color_Light_8",
+
+    "UFO_ScreenItem_Background": "Color_Light_2",
+    "UFO_ScreenItem_Text": "Color_Dark_4",
+
+    "UFO_Image_Background": "Color_Light_2"
 }
