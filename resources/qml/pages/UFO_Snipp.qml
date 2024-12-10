@@ -54,7 +54,7 @@ UFO_Page {
     }
 
     function onCustomAreaCancled() {
-        showNormal()
+        rootWindow.setVisible(true)
     }
 
     QtObject {
@@ -181,7 +181,7 @@ UFO_Page {
 
                 // TODO I am not sure if this is possible, but maybe it would be just easier to hide the window instead of
                 // minimizing and showing it.
-                showMinimized() // Minimize the main window
+                rootWindow.setVisible(false) // Minimize the main window
 
                 if (properties.selectedCaptureMode === 0) {
                     Screenshot.initiateScreenshot(properties.selectedScreen)
@@ -291,7 +291,7 @@ UFO_Page {
             // TODO maybe there could also be a way to trigger this through a call to slot or somethnig that Image has internally.
             image_Preview.source = "./../../images/black.png"
             image_Preview.source = Screenshot.screenshot
-            showNormal()
+            rootWindow.setVisible(true)
         }
     }
 }

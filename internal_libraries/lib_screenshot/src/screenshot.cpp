@@ -178,14 +178,14 @@ void Screenshot::takeScreenshot(const QString &screenName)
     //                selectedScreen->devicePixelRatio()
     //            );
 
-    if(m_Screenshot.isNull())
-    {
-        qDebug() << "is null";
-        return;
-    }
+    // if(m_Screenshot.isNull())
+    // {
+    //     qDebug() << "is null";
+    //     return;
+    // }
 
     //m_Screenshot.copy(output);
-    emit screenshotChanged();
+    //emit screenshotChanged();
 
     setScreenshotExists(true);
 }

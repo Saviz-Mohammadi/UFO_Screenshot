@@ -11,7 +11,7 @@ import "pages"
 import AppTheme 1.0
 
 ApplicationWindow {
-    id: root
+    id: rootWindow
 
     width: 800
     height: 600
