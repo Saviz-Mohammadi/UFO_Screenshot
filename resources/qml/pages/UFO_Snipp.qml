@@ -57,6 +57,14 @@ UFO_Page {
         rootWindow.setVisible(true)
     }
 
+    // For when full screen mode is closed.
+    function onFullScreenClosed()
+    {
+        // For now we do nothing, because we really don't need to do anything.
+        // All we do is open full screen and if we close it, we just go back to the original screen.
+        // I just put this here for future use if need be to react or do something extra.
+    }
+
     QtObject {
         id: properties
 
@@ -253,9 +261,11 @@ UFO_Page {
             svg: "./../../icons/Google icons/fullscreen.svg"
 
             onClicked: {
-                var component = Qt.createComponent(
-                            "./../components_custom/UFO_FullScreen.qml")
+                var component = Qt.createComponent("./../components_custom/UFO_FullScreen.qml")
                 var fullScreen = component.createObject(root)
+
+                // Connect to closing() signal to ensure what happens after closing out of full screen mode.
+                fullScreen.closing.connect(onFullScreenClosed)
             }
         }
     }

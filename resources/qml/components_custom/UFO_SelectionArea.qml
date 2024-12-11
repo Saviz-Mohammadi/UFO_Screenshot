@@ -51,7 +51,7 @@ Window {
                 )
 
                 event.accepted = true;  // Prevent other items from handling this event
-                root.destroy(0)
+                root.close()
             }
 
             if (event.key === Qt.Key_Escape) {
@@ -60,7 +60,7 @@ Window {
                 root.canceled();  // Just in case we need it later.
 
                 event.accepted = true;  // Prevent other items from handling this event
-                root.destroy(0)
+                root.close()
             }
         }
 

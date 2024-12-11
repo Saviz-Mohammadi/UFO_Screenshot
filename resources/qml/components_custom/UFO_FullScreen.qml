@@ -12,8 +12,6 @@ import Screenshot 1.0
 Window {
     id: root
 
-    signal closed()
-
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     modality: Qt.ApplicationModal
     color: "transparent"
@@ -36,10 +34,10 @@ Window {
 
         Keys.onPressed: (event)=> {
             if (event.key === Qt.Key_Escape) {
-                root.closed()
-
                 event.accepted = true;  // Prevent other items from handling this event
-                root.destroy(0)
+
+                // We could make our own signal and react to it instead. However, there is an already existing signal for this to react to.
+                root.close()
             }
         }
 
