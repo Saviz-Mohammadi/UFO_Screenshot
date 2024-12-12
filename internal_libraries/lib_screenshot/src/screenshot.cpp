@@ -1,6 +1,6 @@
 #include "screenshot.hpp"
 
-Screenshot* Screenshot::m_Instance = nullptr;
+Screenshot* Screenshot::m_Instance = Q_NULLPTR;
 
 // Constructors, Initializers, Destructor
 // [[------------------------------------------------------------------------]]
@@ -125,7 +125,7 @@ bool Screenshot::fileExists(const QString &path)
 void Screenshot::saveScreenshot(QUrl path)
 {
     //qDebug() << "The path was: " << path.toLocalFile();
-    bool success = m_Screenshot.save(path.toLocalFile(), nullptr);
+    bool success = m_Screenshot.save(path.toLocalFile(), Q_NULLPTR);
 
     if(!success)
     {
@@ -149,7 +149,7 @@ void Screenshot::saveScreenshot(QUrl path)
 // This method is for "FullScreen".
 void Screenshot::takeScreenshot(const QString &screenName)
 {
-    QScreen* selectedScreen = nullptr;
+    QScreen* selectedScreen = Q_NULLPTR;
 
     // Find the screen with the specified name;
     for (QScreen *screen : QGuiApplication::screens())
@@ -168,7 +168,7 @@ void Screenshot::takeScreenshot(const QString &screenName)
     // The "grabWindow()" function doesn’t work under Wayland.
     //m_Screenshot = ;
 
-    //output.save("./testing.png", nullptr);
+    //output.save("./testing.png", Q_NULLPTR);
 
     setScreenshot(
         selectedScreen->grabWindow(0)
@@ -193,7 +193,7 @@ void Screenshot::takeScreenshot(const QString &screenName)
 // This method is for "CustomArea".
 void Screenshot::takeScreenshot(const QString &screenName, qreal x, qreal y, qint64 width, qint64 height)
 {
-    QScreen* selectedScreen = nullptr;
+    QScreen* selectedScreen = Q_NULLPTR;
 
     // Find the screen with the specified name;
     for (QScreen *screen : QGuiApplication::screens())
@@ -242,7 +242,7 @@ QUrl Screenshot::getScreenshot() const
     // Probably good idea to refactor this and make it universally accessible.
 QDir dir("./cache/screenshots");
 
-m_Screenshot.save("./cache/screenshots/temp.png", nullptr);
+m_Screenshot.save("./cache/screenshots/temp.png", Q_NULLPTR);
 
 return (QUrl::fromLocalFile(dir.absolutePath() + "/temp.png"));
 }
@@ -271,7 +271,7 @@ void Screenshot::setScreenshot(QPixmap newScreenshot)
     m_Screenshot = newScreenshot.copy(); // Performing deep copy.
 
     // TODO turn this into pivate slot instead and connect to signal to trigger it
-    m_Screenshot.save("./cache/screenshots/temp.png", nullptr);
+    m_Screenshot.save("./cache/screenshots/temp.png", Q_NULLPTR);
 
     // Make a path to cache folder and save file.
     //m_Screenshot

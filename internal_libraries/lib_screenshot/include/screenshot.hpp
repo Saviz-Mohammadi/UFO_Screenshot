@@ -31,11 +31,11 @@ class Screenshot : public QObject
 
     // Constructors, Initializers, Destructor
 public:
-    explicit Screenshot(QObject *parent = nullptr, const QString& name = "No name");
+    explicit Screenshot(QObject *parent = Q_NULLPTR, const QString& name = "No name");
     ~Screenshot();
 
     static Screenshot *qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine);
-    static Screenshot *cppInstance(QObject *parent = nullptr);
+    static Screenshot *cppInstance(QObject *parent = Q_NULLPTR);
 
     // Fields;
 private:
