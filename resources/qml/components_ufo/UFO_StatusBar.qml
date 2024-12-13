@@ -8,11 +8,30 @@ import AppTheme 1.0
 Item {
     id: root
 
+    property alias text: text_1.text
+    property real textLeftMargin: 7
+
+    function displayMessage(message, duration) {
+        text_1.text = qsTr(message)
+
+        if(duration === undefined) {
+            return
+        }
+
+        timer.interval = duration
+        timer.start()
+    }
+
     implicitWidth: 200
     implicitHeight: 28
 
-    property alias text: text_1.text
-    property real textLeftMargin: 7
+    Timer {
+        id: timer
+
+        onTriggered: {
+            text_1.text = qsTr("")
+        }
+    }
 
     Rectangle {
         id: rectangle_1
