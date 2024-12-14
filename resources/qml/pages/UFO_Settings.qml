@@ -14,19 +14,14 @@ UFO_Page {
     title: qsTr("Application Settings")
     contentSpacing: 20
 
-    // Settings Page
     UFO_GroupBox {
-        id: ufo_GroupBox_1
-
         Layout.fillWidth: true
-        // No point setting "Layout.fillHeight" as "UFO_Page" ignores height to enable vertical scrolling.
+        // NOTE (SAVIZ): No point using "Layout.fillHeight" as "UFO_Page" ignores height to enable vertical scrolling.
 
         title: qsTr("Style")
         contentSpacing: 0
 
         Text {
-            id: text_1
-
             Layout.fillWidth: true
 
             Layout.topMargin: 20
@@ -43,7 +38,7 @@ UFO_Page {
         }
 
         UFO_ComboBox {
-            id: ufo_ComboBox_1
+            id: ufo_ComboBox_Style
 
             Layout.fillWidth: true
             Layout.preferredHeight: 35
@@ -62,16 +57,17 @@ UFO_Page {
             Component.onCompleted: {
                 var cachedTheme = AppTheme.getCachedTheme()
 
-                for (var index = 0; index < ufo_ComboBox_1.model.length; ++index) {
-                    if (cachedTheme === ""
-                            && ufo_ComboBox_1.model[index] === "ufo_light") {
+                for (var index = 0; index < ufo_ComboBox_Style.model.length; ++index) {
 
-                        ufo_ComboBox_1.currentIndex = index
+                    if (cachedTheme === "" && ufo_ComboBox_Style.model[index] === "ufo_light") {
+                        ufo_ComboBox_Style.currentIndex = index
+
                         break
                     }
 
-                    if (ufo_ComboBox_1.model[index] === cachedTheme) {
-                        ufo_ComboBox_1.currentIndex = index
+                    if (ufo_ComboBox_Style.model[index] === cachedTheme) {
+                        ufo_ComboBox_Style.currentIndex = index
+
                         break
                     }
                 }

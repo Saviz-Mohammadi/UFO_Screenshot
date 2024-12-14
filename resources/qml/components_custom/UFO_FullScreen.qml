@@ -24,19 +24,15 @@ Window {
     }
 
     Rectangle {
-        id: rectangle_background
-
         anchors.fill: parent
 
         focus: true
-
         color: "black"
 
         Keys.onPressed: (event)=> {
             if (event.key === Qt.Key_Escape) {
-                event.accepted = true;  // Prevent other items from handling this event
+                event.accepted = true;
 
-                // We could make our own signal and react to it instead. However, there is an already existing signal for this to react to.
                 root.close()
             }
         }

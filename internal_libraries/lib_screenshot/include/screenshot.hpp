@@ -22,10 +22,7 @@ class Screenshot : public QObject
 
     // Q_PROPERTY;
 
-    // This might be surprising, I need to explain this:
-    // After doing some massive research, it turns out the only way to fully sync a QPixmap with QML is by
-    // subclassing a type called "QQuikcImageProvider" or something like that. This is way too complicated in my
-    // opinnion. So, instead what we do is send the image data through a String stream. For our purposes this should be enough for now.
+    // After doing some massive research, it turns out that the only way to fully sync a "QPixmap" with QML is by subclassing a type called "QQuickImageProvider". This is way too complicated in my opinnion. So, instead what we do is send the image data through a String stream. This should be enough for now.
     Q_PROPERTY(QUrl screenshot READ getScreenshot NOTIFY screenshotChanged)
     Q_PROPERTY(bool screenshotExists READ getScreenshotExists NOTIFY screenshotExistsChanged)
 

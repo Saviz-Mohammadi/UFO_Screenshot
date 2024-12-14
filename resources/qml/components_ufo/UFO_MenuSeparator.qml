@@ -9,8 +9,6 @@ MenuSeparator {
     id: root
 
     contentItem: Rectangle {
-        id: rectangle_1
-
         implicitWidth: 200
         implicitHeight: 1
 

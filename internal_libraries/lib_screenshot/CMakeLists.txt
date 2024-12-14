@@ -100,7 +100,8 @@ target_link_libraries(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
 
-    PRIVATE)
+    PRIVATE
+    "Lib_Logger")
 
 # [[ ----------------------------------------------------------------------- ]]
 # [[ ----------------------------------------------------------------------- ]]

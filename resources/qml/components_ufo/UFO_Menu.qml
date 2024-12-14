@@ -13,8 +13,6 @@ Menu {
     delegate: UFO_MenuItem {}
 
     background: Rectangle {
-        id: rectangle_1
-
         implicitWidth: 150
         implicitHeight: 28
 

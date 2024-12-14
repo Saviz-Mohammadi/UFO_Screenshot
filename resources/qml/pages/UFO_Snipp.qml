@@ -20,13 +20,12 @@ UFO_Page {
 
     function onScreenSelected(sender, screenName) {
 
-        for (var i = 0; i < repeater_1.count; i++) {
-            var item = repeater_1.itemAt(i)
+        for (var i = 0; i < repeater.count; i++) {
+            var item = repeater.itemAt(i)
 
             item.selected = false
         }
 
-        // Highlight only the element that was selected
         sender.selected = true
 
         for (var j = 0; j < Qt.application.screens.length; j++) {
@@ -48,21 +47,16 @@ UFO_Page {
         properties.width = width
         properties.height = height
 
-        Screenshot.initiateScreenshot(properties.selectedScreen, properties.x,
-                                      properties.y, properties.width,
-                                      properties.height)
+        Screenshot.initiateScreenshot(properties.selectedScreen, properties.x, properties.y, properties.width, properties.height)
     }
 
     function onCustomAreaCancled() {
         rootWindow.setVisible(true)
     }
 
-    // For when full screen mode is closed.
     function onFullScreenClosed()
     {
-        // For now we do nothing, because we really don't need to do anything.
-        // All we do is open full screen and if we close it, we just go back to the original screen.
-        // I just put this here for future use if need be to react or do something extra.
+        // NOTE (SAVIZ): For now, we perform nothing.
     }
 
     QtObject {
@@ -71,7 +65,7 @@ UFO_Page {
         property int selectedCaptureMode: 0
         property string selectedScreen: ""
         property string path: ""
-        property bool screenIsSelected: false // Just to make sure that user selects a screen before taking screenshot
+        property bool screenIsSelected: false
         property int x: 0
         property int y: 0
         property int width: 0
@@ -89,7 +83,6 @@ UFO_Page {
         defaultSuffix: ".png"
 
         onAccepted: {
-            // Handle the selected file path
             console.log("Selected file path:", fileDialog.selectedFile)
 
             if (Screenshot.fileExists(fileDialog.selectedFile)) {
@@ -114,8 +107,7 @@ UFO_Page {
         buttons: MessageDialog.Ok | MessageDialog.Cancel
 
         onRejected: {
-
-            // Maybe display a popup here saying "Save canceled"
+            // TODO (SAVIZ): Display a popup here saying "Canceled"
         }
 
         onAccepted: {
@@ -124,17 +116,13 @@ UFO_Page {
     }
 
     UFO_GroupBox {
-        id: ufo_GroupBox_1
-
         Layout.fillWidth: true
-        // No point setting "Layout.fillHeight" as "UFO_Page" ignores height to enable vertical scrolling.
+        // NOTE (SAVIZ): No point using "Layout.fillHeight" as "UFO_Page" ignores height to enable vertical scrolling.
 
         title: qsTr("Available Screens")
         contentSpacing: 0
 
         Text {
-            id: text_1
-
             Layout.fillWidth: true
 
             Layout.topMargin: 20
@@ -151,13 +139,14 @@ UFO_Page {
         }
 
         Flow {
-            spacing: 10
-
             Layout.fillWidth: true
+
             Layout.margins: 10
 
+            spacing: 10
+
             Repeater {
-                id: repeater_1
+                id: repeater
 
                 model: Qt.application.screens
 
@@ -166,7 +155,6 @@ UFO_Page {
                     screenName: modelData.name
 
                     Component.onCompleted: {
-                        // Connect the clicked signal of each item to a JavaScript function
                         screenSelected.connect(root.onScreenSelected)
                     }
                 }
@@ -175,8 +163,6 @@ UFO_Page {
     }
 
     RowLayout {
-        id: rowLayout_1
-
         Layout.fillWidth: true
 
         UFO_Button {
@@ -186,19 +172,16 @@ UFO_Page {
             svg: "./../../icons/Google icons/photo_camera.svg"
 
             onClicked: {
-
-                // TODO I am not sure if this is possible, but maybe it would be just easier to hide the window instead of
-                // minimizing and showing it.
-                rootWindow.setVisible(false) // Minimize the main window
+                rootWindow.setVisible(false)
 
                 if (properties.selectedCaptureMode === 0) {
                     Screenshot.initiateScreenshot(properties.selectedScreen)
+
                     return
                 }
 
                 if (properties.selectedCaptureMode === 1) {
-                    var component = Qt.createComponent(
-                                "./../components_custom/UFO_SelectionArea.qml")
+                    var component = Qt.createComponent("./../components_custom/UFO_SelectionArea.qml")
                     var selectionArea = component.createObject(root)
 
                     selectionArea.selected.connect(onAreaSelected)
@@ -208,6 +191,7 @@ UFO_Page {
 
                         if (Qt.application.screens[j].name === properties.selectedScreen) {
                             selectionArea.screen = Qt.application.screens[j]
+
                             break
                         }
                     }
@@ -217,9 +201,7 @@ UFO_Page {
             }
         }
 
-        // TODO See if you can turn this into enum instead:
         UFO_ComboBox {
-
             Layout.preferredWidth: 120
             Layout.preferredHeight: 35
 
@@ -236,13 +218,11 @@ UFO_Page {
         }
 
         UFO_Button {
-
-            enabled: Screenshot.screenshotExists
-            text: qsTr("Save As")
-
             Layout.preferredWidth: 120
             Layout.preferredHeight: 40
 
+            enabled: Screenshot.screenshotExists
+            text: qsTr("Save As")
             svg: "./../../icons/Google icons/save_as.svg"
 
             onClicked: {
@@ -251,20 +231,17 @@ UFO_Page {
         }
 
         UFO_Button {
-
-            enabled: Screenshot.screenshotExists
-            text: qsTr("Maximize")
-
             Layout.preferredWidth: 120
             Layout.preferredHeight: 40
 
+            enabled: Screenshot.screenshotExists
+            text: qsTr("Maximize")
             svg: "./../../icons/Google icons/fullscreen.svg"
 
             onClicked: {
                 var component = Qt.createComponent("./../components_custom/UFO_FullScreen.qml")
                 var fullScreen = component.createObject(root)
 
-                // Connect to closing() signal to ensure what happens after closing out of full screen mode.
                 fullScreen.closing.connect(onFullScreenClosed)
             }
         }
@@ -284,24 +261,23 @@ UFO_Page {
             id: image_Preview
 
             anchors.fill: parent
+
             anchors.margins: 15
-            // I believe its a caching thing on the QML side that prevents it re-fetching the data
-            // Also note that you must change the entire image for this to trigger, because changing path is not enough.
-            // TODO Probably a good idea to make the initial value of screenshot to be a black box in construcor of Screenshot.
-            //source: Screenshot.screenshot
+
             fillMode: Image.PreserveAspectFit
             smooth: true
             cache: false
         }
     }
 
+    // NOTE (SAVIZ): I am not entirely sure, but for some reason I have to do this to trigger the internal code to reproduce the image. Some say this is a caching behaviour.
     Connections {
         target: Screenshot
 
         function onScreenshotChanged() {
-            // TODO maybe there could also be a way to trigger this through a call to slot or somethnig that Image has internally.
             image_Preview.source = "./../../images/black.png"
             image_Preview.source = Screenshot.screenshot
+
             rootWindow.setVisible(true)
         }
     }

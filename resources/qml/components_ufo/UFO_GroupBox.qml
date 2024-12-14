@@ -8,17 +8,17 @@ import AppTheme 1.0
 Item {
     id: root
 
-    implicitWidth: 300
-    implicitHeight: (rectangle_1.implicitHeight + rectangle_2.implicitHeight + rectangle_3.implicitHeight)
-
-    default property alias content: columnLayout_1.data
+    default property alias content: columnLayout.data
     property int contentSpacing: 7
-    property alias title: text_1.text
+    property alias title: text.text
     property real titleFontSize: 1.3
     property real titleTopMargin: 0
     property real titleBottomMarign: 0
     property real titleLeftMargin: 10
     property real titleRightMargin: 10
+
+    implicitWidth: 300
+    implicitHeight: (rectangle_1.implicitHeight + rectangle_2.implicitHeight + rectangle_3.implicitHeight)
 
     Rectangle {
         id: rectangle_1
@@ -33,7 +33,7 @@ Item {
         color: Qt.color(AppTheme.colors["UFO_GroupBox_Title_Background"])
 
         Text {
-            id: text_1
+            id: text
 
             anchors.fill: parent
 
@@ -73,13 +73,13 @@ Item {
         anchors.bottom: root.bottom
 
         implicitWidth: root.implicitWidth
-        implicitHeight: columnLayout_1.implicitHeight
+        implicitHeight: columnLayout.implicitHeight
 
         color: Qt.color(AppTheme.colors["UFO_GroupBox_Content_Background"])
         radius: 0
 
         ColumnLayout {
-            id: columnLayout_1
+            id: columnLayout
 
             width: rectangle_3.width
 

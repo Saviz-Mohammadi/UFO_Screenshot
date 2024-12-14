@@ -6,8 +6,6 @@ import QtQuick.Layouts
 import AppTheme 1.0
 
 Rectangle {
-    id: rectangle_1
-
     implicitWidth: 200
     implicitHeight: 1
 

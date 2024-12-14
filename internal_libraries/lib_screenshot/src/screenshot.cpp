@@ -1,5 +1,10 @@
 #include "screenshot.hpp"
 
+#ifdef QT_DEBUG
+    #include "logger.hpp"
+#endif
+
+
 Screenshot* Screenshot::m_Instance = Q_NULLPTR;
 
 // Constructors, Initializers, Destructor
@@ -14,7 +19,7 @@ Screenshot::Screenshot(QObject *parent, const QString& name)
 {
     this->setObjectName(name);
 
-    // Probably good idea to refactor this and make it universally accessible.
+    // TODO (SAVIZ): Probably good idea to refactor this and make it universally accessible.
     QDir dir("./cache/screenshots");
 
     if(!dir.exists())
@@ -22,28 +27,19 @@ Screenshot::Screenshot(QObject *parent, const QString& name)
         dir.mkpath("./cache/screenshots");
     }
 
-// Debugging
 #ifdef QT_DEBUG
-    qDebug() << "\n**************************************************\n"
-             << "* Object Name :" << this->objectName()  << "\n"
-             << "* Function    :" << __FUNCTION__        << "\n"
-             << "* Message     : Call to Constructor"
-             << "\n**************************************************\n\n";
+    QString message("Call to Constructor");
+
+    logger::log(logger::LOG_LEVEL::DEBUG, this->objectName(), Q_FUNC_INFO, message);
 #endif
 }
 
 Screenshot::~Screenshot()
 {
-
-
-
-// Debugging
 #ifdef QT_DEBUG
-    qDebug() << "\n**************************************************\n"
-             << "* Object Name :" << this->objectName()  << "\n"
-             << "* Function    :" << __FUNCTION__        << "\n"
-             << "* Message     : Call to Destructor"
-             << "\n**************************************************\n\n";
+    QString message("Call to Destructor");
+
+    logger::log(logger::LOG_LEVEL::DEBUG, this->objectName(), Q_FUNC_INFO, message);
 #endif
 }
 
@@ -85,7 +81,7 @@ Screenshot *Screenshot::cppInstance(QObject *parent)
 
 void Screenshot::initiateScreenshot(const QString &screenName)
 {
-    // Waiting makes sure that the window has enough time to hide;
+    // NOTE (SAVIZ): Waiting makes sure that the window has enough time to hide.
     QTimer::singleShot(
 
         m_Delay,
@@ -96,10 +92,9 @@ void Screenshot::initiateScreenshot(const QString &screenName)
     );
 }
 
-void Screenshot::initiateScreenshot(
-    const QString &screenName, qreal x, qreal y, qint64 width, qint64 height)
+void Screenshot::initiateScreenshot(const QString &screenName, qreal x, qreal y, qint64 width, qint64 height)
 {
-    // Waiting makes sure that the window has enough time to hide;
+    // NOTE (SAVIZ): Waiting makes sure that the window has enough time to hide.
     QTimer::singleShot(
 
         m_Delay,
@@ -124,7 +119,6 @@ bool Screenshot::fileExists(const QString &path)
 
 void Screenshot::saveScreenshot(QUrl path)
 {
-    //qDebug() << "The path was: " << path.toLocalFile();
     bool success = m_Screenshot.save(path.toLocalFile(), Q_NULLPTR);
 
     if(!success)
@@ -146,12 +140,11 @@ void Screenshot::saveScreenshot(QUrl path)
 // [[------------------------------------------------------------------------]]
 // [[------------------------------------------------------------------------]]
 
-// This method is for "FullScreen".
+// NOTE (SAVIZ): This method is for "FullScreen" mode.
 void Screenshot::takeScreenshot(const QString &screenName)
 {
     QScreen* selectedScreen = Q_NULLPTR;
 
-    // Find the screen with the specified name;
     for (QScreen *screen : QGuiApplication::screens())
     {
         if (screen->name() == screenName)
@@ -161,41 +154,17 @@ void Screenshot::takeScreenshot(const QString &screenName)
         }
     }
 
-    //qDebug() << screenName;
-    //qDebug() << selectedScreen->name();
-
-
-    // The "grabWindow()" function doesn’t work under Wayland.
-    //m_Screenshot = ;
-
-    //output.save("./testing.png", Q_NULLPTR);
-
-    setScreenshot(
-        selectedScreen->grabWindow(0)
-    );
-
-    //            m_Screenshot.setDevicePixelRatio(
-    //                selectedScreen->devicePixelRatio()
-    //            );
-
-    // if(m_Screenshot.isNull())
-    // {
-    //     qDebug() << "is null";
-    //     return;
-    // }
-
-    //m_Screenshot.copy(output);
-    //emit screenshotChanged();
+    // WARNING (SAVIZ): The "grabWindow()" method does not work correctly under Wayland.
+    setScreenshot(selectedScreen->grabWindow(0));
 
     setScreenshotExists(true);
 }
 
-// This method is for "CustomArea".
+// NOTE (SAVIZ): This method is for "CustomArea" mode.
 void Screenshot::takeScreenshot(const QString &screenName, qreal x, qreal y, qint64 width, qint64 height)
 {
     QScreen* selectedScreen = Q_NULLPTR;
 
-    // Find the screen with the specified name;
     for (QScreen *screen : QGuiApplication::screens())
     {
         if (screen->name() == screenName)
@@ -205,8 +174,7 @@ void Screenshot::takeScreenshot(const QString &screenName, qreal x, qreal y, qin
         }
     }
 
-
-    // The "grabWindow()" function doesn’t work under Wayland.
+    // WARNING (SAVIZ): The "grabWindow()" method does not work correctly under Wayland.
     setScreenshot(
         selectedScreen->grabWindow(
             0,
@@ -214,12 +182,8 @@ void Screenshot::takeScreenshot(const QString &screenName, qreal x, qreal y, qin
             y,
             width,
             height
-            )
-        );
-
-    //            m_Screenshot.setDevicePixelRatio(
-    //                selectedScreen->devicePixelRatio()
-    //            );
+        )
+    );
 
     setScreenshotExists(true);
 }
@@ -235,16 +199,13 @@ void Screenshot::takeScreenshot(const QString &screenName, qreal x, qreal y, qin
 // [[------------------------------------------------------------------------]]
 // [[------------------------------------------------------------------------]]
 
-// I honestly think it may be better to just save to cache and link to file for this one
 QUrl Screenshot::getScreenshot() const
 {
+    QDir dir("./cache/screenshots");
 
-    // Probably good idea to refactor this and make it universally accessible.
-QDir dir("./cache/screenshots");
+    m_Screenshot.save("./cache/screenshots/temp.png", Q_NULLPTR);
 
-m_Screenshot.save("./cache/screenshots/temp.png", Q_NULLPTR);
-
-return (QUrl::fromLocalFile(dir.absolutePath() + "/temp.png"));
+    return (QUrl::fromLocalFile(dir.absolutePath() + "/temp.png"));
 }
 
 bool Screenshot::getScreenshotExists() const
@@ -265,22 +226,17 @@ bool Screenshot::getScreenshotExists() const
 
 void Screenshot::setScreenshot(QPixmap newScreenshot)
 {
-    // It is not easy to compare a QPixmaps.
-    // So, for now I just change it no matter what.
+    m_Screenshot = newScreenshot.copy();
 
-    m_Screenshot = newScreenshot.copy(); // Performing deep copy.
-
-    // TODO turn this into pivate slot instead and connect to signal to trigger it
     m_Screenshot.save("./cache/screenshots/temp.png", Q_NULLPTR);
 
-    // Make a path to cache folder and save file.
-    //m_Screenshot
     emit screenshotChanged();
 }
 
 void Screenshot::setScreenshotExists(bool newScreenshotExists)
 {
     m_ScreenshotExists = newScreenshotExists;
+
     emit screenshotExistsChanged();
 }
 

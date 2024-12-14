@@ -20,22 +20,18 @@ ApplicationWindow {
     title: qsTr("UFO_Screenshot")
 
     menuBar: UFO_MenuBar {
-        id: ufo_MenuBar_1
-
         spacing: 0
 
         UFO_Menu {
-            id: ufo_Menu_1
-
-            title: qsTr("File")
             topMargin: 0
             leftMargin: 0
 
-            UFO_MenuItem {
-                id: ufo_MenuItem_1
+            title: qsTr("File")
 
+            UFO_MenuItem {
                 leftPadding: 10
                 rightPadding: 10
+
                 text: qsTr("Quit")
 
                 onTriggered: {
@@ -45,77 +41,67 @@ ApplicationWindow {
         }
 
         UFO_Menu {
-            id: ufo_Menu_2
-
-            title: qsTr("View")
             topMargin: 0
             leftMargin: 0
 
-            UFO_MenuItem {
-                id: ufo_MenuItem_4
+            title: qsTr("View")
 
+            UFO_MenuItem {
                 leftPadding: 10
                 rightPadding: 10
-                text: qsTr("Snipp page")
+
+                text: qsTr("Snipp Page")
 
                 onTriggered: {
-                    stackLayout_1.currentIndex = ufo_Snipp.StackLayout.index
+                    stackLayout.currentIndex = ufo_Snipp.StackLayout.index
 
-                    // Change checked state of side bar.
-                    ufo_SideBar_1.checkTabButton("Snipp")
+                    ufo_SideBar_Main.checkTabButton("Snipp Page")
                 }
             }
 
             UFO_MenuItem {
-                id: ufo_MenuItem_2
-
                 leftPadding: 10
                 rightPadding: 10
-                text: qsTr("Settings page")
+
+                text: qsTr("Settings Page")
 
                 onTriggered: {
-                    stackLayout_1.currentIndex = ufo_Settings.StackLayout.index
+                    stackLayout.currentIndex = ufo_Settings.StackLayout.index
 
-                    // Change checked state of side bar.
-                    ufo_SideBar_1.checkTabButton("Settings")
+                    ufo_SideBar_Main.checkTabButton("Settings Page")
                 }
             }
 
             UFO_MenuItem {
-                id: ufo_MenuItem_3
-
                 leftPadding: 10
                 rightPadding: 10
-                text: qsTr("About page")
+
+                text: qsTr("About Page")
 
                 onTriggered: {
-                    stackLayout_1.currentIndex = ufo_About.StackLayout.index
+                    stackLayout.currentIndex = ufo_About.StackLayout.index
 
-                    // Change checked state of side bar.
-                    ufo_SideBar_1.checkTabButton("About")
+                    ufo_SideBar_Main.checkTabButton("About Page")
                 }
             }
         }
 
         UFO_Menu {
-            id: ufo_Menu_3
-
-            title: qsTr("Help")
             topMargin: 0
             leftMargin: 0
 
-            UFO_MenuItem {
-                id: ufo_MenuItem_6
+            title: qsTr("Help")
 
+            UFO_MenuItem {
                 leftPadding: 10
                 rightPadding: 10
+
                 text: qsTr("About UFO_Screenshot")
 
                 onTriggered: {
-                    stackLayout_1.currentIndex = ufo_About.StackLayout.index
+                    stackLayout.currentIndex = ufo_About.StackLayout.index
 
-                    // Change checked state of side bar.
-                    ufo_SideBar_1.checkTabButton("About")
+                    ufo_SideBar_Main.checkTabButton("About Page")
                 }
             }
         }
@@ -128,21 +114,19 @@ ApplicationWindow {
     }
 
 
-
     UFO_SplitView {
-        id: splitView_1
-
         anchors.fill: parent
 
         UFO_SideBar {
-            id: ufo_SideBar_1
+            id: ufo_SideBar_Main
 
-            Layout.preferredWidth: 200 // This will give an initial startup width to the SideBar.
+            // NOTE (SAVIZ): Initial startup width for the main SideBar.
+            Layout.preferredWidth: 200
             Layout.fillHeight: true
         }
 
         StackLayout {
-            id: stackLayout_1
+            id: stackLayout
 
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -169,28 +153,29 @@ ApplicationWindow {
             }
 
             Connections {
-                target: ufo_SideBar_1
+                target: ufo_SideBar_Main
 
                 function onTabChanged(pageName) {
-                    switch (pageName) {
 
-                    case "Snipp page":
-                        stackLayout_1.currentIndex = ufo_Snipp.StackLayout.index
-                        break
-                    case "Settings page":
-                        stackLayout_1.currentIndex = ufo_Settings.StackLayout.index
-                        break
-                    case "About page":
-                        stackLayout_1.currentIndex = ufo_About.StackLayout.index
-                        break
-                    default:
-                        stackLayout_1.currentIndex = -1
+                    // TODO (SAVIZ): I like to replace these with an enum, but currently I don't know how in QML.
+                    switch (pageName) {
+                        case "Snipp Page":
+                            stackLayout.currentIndex = ufo_Snipp.StackLayout.index
+                            break
+                        case "Settings Page":
+                            stackLayout.currentIndex = ufo_Settings.StackLayout.index
+                            break
+                        case "About Page":
+                            stackLayout.currentIndex = ufo_About.StackLayout.index
+                            break
+                        default:
+                            stackLayout.currentIndex = -1
                     }
                 }
             }
 
             Component.onCompleted: {
-                stackLayout_1.currentIndex = ufo_About.StackLayout.index
+                stackLayout.currentIndex = ufo_About.StackLayout.index
             }
         }
     }

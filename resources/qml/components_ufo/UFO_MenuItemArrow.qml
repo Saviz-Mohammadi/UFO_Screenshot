@@ -6,9 +6,8 @@ import QtQuick.Layouts
 import AppTheme 1.0
 
 Canvas {
-    id: canvas_1
-
     x: parent.width - width
+
     implicitWidth: 40
     implicitHeight: 28
 

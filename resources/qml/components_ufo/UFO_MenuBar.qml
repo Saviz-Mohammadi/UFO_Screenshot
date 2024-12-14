@@ -10,12 +10,8 @@ MenuBar {
 
     delegate: UFO_MenuBarItem {}
 
-    // The reason why this Rectangle stretches all the way in your app,
-    // is because "ApplicationWindow" forces it to. This is good, because
-    // We do not have to worry about setting the correct width;
+    // NOTE (SAVIZ): The reason why this Rectangle stretches all the way in the app, is because "ApplicationWindow" forces it to.
     background: Rectangle {
-        id: rectangle_1
-
         implicitWidth: 40
         implicitHeight: 28
 

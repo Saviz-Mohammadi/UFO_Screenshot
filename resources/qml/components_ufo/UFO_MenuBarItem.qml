@@ -9,8 +9,6 @@ MenuBarItem {
     id: root
 
     contentItem: Text {
-        id: text_1
-
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
 
@@ -24,8 +22,6 @@ MenuBarItem {
     }
 
     background: Rectangle {
-        id: rectangle_1
-
         implicitWidth: 40
         implicitHeight: 28
 

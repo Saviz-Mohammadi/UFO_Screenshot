@@ -22,8 +22,10 @@ Rectangle {
 
     Text {
         id: name
-        text: "Screen Name" // Set this dynamically
+
         anchors.centerIn: parent
+
+        text: "Screen Name" // Set this dynamically
         color: Qt.color(AppTheme.colors["UFO_ScreenItem_Text"])
         font.pixelSize: 14 // TODO change this to by dynamic font size
 

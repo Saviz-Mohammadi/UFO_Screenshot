@@ -8,14 +8,14 @@ import AppTheme 1.0
 ProgressBar {
     id: root
 
-    padding: 2
-
-    property alias message: text_1.text
+    property alias message: text.text
     property int circleWidth: 100
     property int circleHeight: 100
 
+    padding: 2
+
     contentItem: Text {
-        id: text_1
+        id: text
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -26,8 +26,6 @@ ProgressBar {
     }
 
     background: Rectangle {
-        id: rectangle_1
-
         readonly property real size: Math.min(root.width, root.height)
 
         anchors.centerIn: parent
@@ -38,7 +36,7 @@ ProgressBar {
         radius: size / 2
 
         Canvas {
-            id: canvas_1
+            id: canvas
 
             anchors.fill: parent
 
@@ -59,6 +57,6 @@ ProgressBar {
     }
 
     onValueChanged: {
-        canvas_1.requestPaint()
+        canvas.requestPaint()
     }
 }

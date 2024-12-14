@@ -27,6 +27,7 @@ Window {
 
         x: parent.width / 2 - (width / 2)
         y: parent.height / 2 - (height / 2)
+
         width: 300
         height: 300
 
@@ -50,64 +51,30 @@ Window {
                     mainRect.height
                 )
 
-                event.accepted = true;  // Prevent other items from handling this event
+                event.accepted = true;
                 root.close()
             }
 
             if (event.key === Qt.Key_Escape) {
                 console.log("Global Escape key pressed");
 
-                root.canceled();  // Just in case we need it later.
+                root.canceled();
 
-                event.accepted = true;  // Prevent other items from handling this event
+                event.accepted = true;
                 root.close()
             }
         }
 
         Text {
-            id: text_dimensions
-
             anchors.centerIn: parent
 
             z: 0
-            text: qsTr(mainRect.x + " X " + mainRect.y)
-                  + "\n" +
-                  qsTr(mainRect.width + " X " + mainRect.height)
+            text: qsTr(mainRect.x + " X " + mainRect.y) + "\n" + qsTr(mainRect.width + " X " + mainRect.height)
         }
 
-        // ColumnLayout {
-        //     anchors.centerIn: parent
-
-
-
-
-
-        //     // // Maybe replace this with arrow keys being pressed
-        //     // ComboBox {
-        //     //     id: screenComboBox
-        //     //     model: Qt.application.screens
-        //     //     textRole: "name"
-
-        //     //     opacity: 1.0
-
-        //     //     onCurrentIndexChanged: {
-        //     //         var selectedScreen = Qt.application.screens[currentIndex];
-        //     //         if (selectedScreen) {
-        //     //             root.screen = selectedScreen;
-        //     //             console.log("Window moved to screen:", selectedScreen.name);
-        //     //         }
-        //     //     }
-
-        //     //     Component.onCompleted: {
-        //     //         screenComboBox.currentIndex = Qt.application.screens.indexOf(root.screen);
-        //     //     }
-        //     // }
-        // }
-
-        // This MousArea takes care of dragging (moving)
         MouseArea {
-            id: mouseArea_dragging
             anchors.fill: parent
+
             drag.target: mainRect
             drag.axis: Drag.XAxis | Drag.YAxis
             drag.minimumX: 0
@@ -120,14 +87,17 @@ Window {
 
         UFO_SelectionCircle {
             id: left
+
             anchors { horizontalCenter: mainRect.left; verticalCenter: mainRect.verticalCenter }
 
             MouseArea {
                 id: leftHandle
-                anchors.fill: parent
-                cursorShape: Qt.SizeHorCursor
 
                 property bool resizing: false
+
+                anchors.fill: parent
+
+                cursorShape: Qt.SizeHorCursor
 
                 onPressed: {
                     resizing = true
@@ -157,14 +127,17 @@ Window {
 
         UFO_SelectionCircle {
             id: right
+
             anchors { horizontalCenter: mainRect.right; verticalCenter: mainRect.verticalCenter }
 
             MouseArea {
                 id: rightHandle
-                anchors.fill: parent
-                cursorShape: Qt.SizeHorCursor
 
                 property bool resizing: false
+
+                anchors.fill: parent
+
+                cursorShape: Qt.SizeHorCursor
 
                 onPressed: {
                     resizing = true
@@ -191,14 +164,17 @@ Window {
 
         UFO_SelectionCircle {
             id: top
+
             anchors { horizontalCenter: mainRect.horizontalCenter; verticalCenter: mainRect.top }
 
             MouseArea {
                 id: topHandle
-                anchors.fill: parent
-                cursorShape: Qt.SizeVerCursor
 
                 property bool resizing: false
+
+                anchors.fill: parent
+
+                cursorShape: Qt.SizeVerCursor
 
                 onPressed: {
                     resizing = true
@@ -227,14 +203,17 @@ Window {
 
         UFO_SelectionCircle {
             id: bottom
+
             anchors { horizontalCenter: mainRect.horizontalCenter; verticalCenter: mainRect.bottom }
 
             MouseArea {
                 id: bottomHandle
-                anchors.fill: parent
-                cursorShape: Qt.SizeVerCursor
 
                 property bool resizing: false
+
+                anchors.fill: parent
+
+                cursorShape: Qt.SizeVerCursor
 
                 onPressed: {
                     resizing = true

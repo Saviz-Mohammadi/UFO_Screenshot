@@ -14,13 +14,12 @@ MenuItem {
     text: qsTr("")
 
     contentItem: Text {
-        id: text_1
-
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
 
         leftPadding: root.indicator.width
         rightPadding: root.arrow.width
+
         text: root.text
         font: root.font
         opacity: enabled ? 1.0 : 0.3
@@ -31,8 +30,6 @@ MenuItem {
     }
 
     background: Rectangle {
-        id: rectangle_1
-
         implicitWidth: 120
         implicitHeight: 28
 
